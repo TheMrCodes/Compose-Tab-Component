@@ -2,12 +2,10 @@ import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,6 +14,7 @@ import theme.AppTheme
 
 
 
+@ExperimentalMaterialApi
 fun main() = Window {
     var isDarkMode by remember { mutableStateOf(false) }
     // Test labels: Microsoft Word Ribbon labels
@@ -29,7 +28,6 @@ fun main() = Window {
         "View",
         "Help"
     )
-    var selectedTabName by remember { mutableStateOf(tabLabels.first()) }
 
     AppTheme(isDarkMode) {
         Column(
@@ -43,13 +41,14 @@ fun main() = Window {
                     Text("To ${if (isDarkMode) "Light" else "Dark"} Theme")
                 }
             }
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                TabMenu({ selectedTabName = tabLabels[it] }, tabLabels)
+            TabMenu(tabLabels) {
+                Content(tabLabels[it])
             }
-            Text("Selected Tab: \"${selectedTabName}\"", Modifier.padding(8.dp))
         }
     }
+}
+
+@Composable
+fun Content(text: String) {
+    Text("Component $text")
 }
